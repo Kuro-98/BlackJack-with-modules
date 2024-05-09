@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { crearDeck } from './usecases/crear-deck';
+import { crearDeck, pedirCarta, valorCarta } from './usecases';
 /**
  * 2C = Two of Clubs (Tréboles)
  * 2D = Two of Diamonds (Diamantes)
@@ -31,29 +31,14 @@ const miModulo = (() => {
 		for (let i = 0; i < numJugadores; i++) {
 			puntosJugadores.push(0);
 		}
-
 		puntajesText.forEach((elemento) => (elemento.textContent = 0));
-
 		divCartasJugadores.forEach((ContcartasJugador) => {
 			while (ContcartasJugador.hasChildNodes()) {
 				ContcartasJugador.removeChild(ContcartasJugador.firstChild);
 			}
 		});
-
 		btnPedir.disabled = false;
 		btnDetener.disabled = false;
-	};
-
-	const pedirCarta = () => {
-		if (deck.length === 0) {
-			throw 'No hay cartas en el deck';
-		}
-		return deck.shift();
-	};
-
-	const valorCarta = (carta) => {
-		const valor = carta.substring(0, carta.length - 1);
-		return isNaN(valor) ? (valor === 'A' ? 11 : 10) : parseInt(valor);
 	};
 
 	const acumularPuntos = (carta, turno) => {
@@ -87,7 +72,7 @@ const miModulo = (() => {
 	const turnoPc = (puntosMinimos) => {
 		let puntosComputadora = 0;
 		do {
-			const carta = pedirCarta();
+			const carta = pedirCarta(deck);
 			puntosComputadora = acumularPuntos(carta, puntosJugadores.length - 1);
 			crearCarta(carta, puntosJugadores.length - 1);
 		} while (puntosComputadora < puntosMinimos && puntosMinimos <= 21);
@@ -97,7 +82,7 @@ const miModulo = (() => {
 
 	//Eventos
 	btnPedir.addEventListener('click', () => {
-		const carta = pedirCarta();
+		const carta = pedirCarta(deck);
 		const puntosJugador = acumularPuntos(carta, 0);
 		crearCarta(carta, 0);
 
