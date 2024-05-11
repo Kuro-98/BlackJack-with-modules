@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	base: '/blackjack-with-modules/',
+	base: '/BlackJack-with-modules/',
 });
